@@ -1,6 +1,7 @@
 package com.example.ilazar.mykeep;
 
 import android.app.Application;
+import android.content.Intent;
 import android.util.Log;
 
 import com.example.ilazar.mykeep.net.NoteRestClient;
@@ -29,4 +30,5 @@ public class KeepApp extends Application {
         super.onTerminate();
         Log.d(TAG, "onTerminate");
     }
+
 }

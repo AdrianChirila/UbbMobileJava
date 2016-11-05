@@ -35,11 +35,8 @@ public class NoteManager {
         return new NoteLoader(mContext, mNoteRestClient);
     }
 
-    public void addNote() {
-//        mNotes.add(new Note("Added note " + mNotes.size()));
-//        if (mOnUpdate != null) {
-//            mOnUpdate.updated();
-//        }
+    public void addNote(String text, OnSuccessListener<Note> onSuccessListener, OnErrorListener onErrorListener) {
+        mNoteRestClient.addNoteAsync(text, onSuccessListener, onErrorListener);
     }
 
     public void setOnUpdate(OnNoteUpdateListener onUpdate) {

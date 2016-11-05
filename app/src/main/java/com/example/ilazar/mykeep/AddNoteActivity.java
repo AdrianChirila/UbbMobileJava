@@ -7,13 +7,24 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
-public class NoteListActivity extends AppCompatActivity {
+import com.example.ilazar.mykeep.content.Note;
+import com.example.ilazar.mykeep.util.OnErrorListener;
+import com.example.ilazar.mykeep.util.OnSuccessListener;
 
-    public static final String TAG = NoteListActivity.class.getSimpleName();
+import java.util.List;
+
+/**
+ * Created by Adrian on 11/5/2016.
+ */
+
+public class AddNoteActivity extends AppCompatActivity {
+
+    public static final String TAG = AddNoteActivity.class.getSimpleName();
 
     private KeepApp mApp;
 
@@ -21,18 +32,30 @@ public class NoteListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mApp = (KeepApp) getApplication();
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.add_note_activity);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);*/
+
+        FloatingActionButton addBtn = (FloatingActionButton) findViewById(R.id.add_btn);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            EditText textNote = (EditText) findViewById(R.id.text_content);
             @Override
             public void onClick(View view) {
-               /* mApp.getNoteManager().addNote();
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();*/
-                startAddNoteActivity();
+                final View finalView = view;
+                mApp.getNoteManager().addNote(textNote.getText().toString(), new OnSuccessListener<Note>() {
+                    @Override
+                    public void onSuccess(Note note) {
+                        Log.d(TAG, "Note was added succesfull");
+                        Snackbar.make(finalView, "Note was added :" + note.getText(), Snackbar.LENGTH_SHORT)
+                                .setAction("Action", null).show();
+                    }
+                }, new OnErrorListener() {
+                    @Override
+                    public void onError(Exception e) {
+                        Log.d(TAG, "Cold not add note");
+                    }
+                });
             }
         });
 
@@ -102,7 +125,5 @@ public class NoteListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void startAddNoteActivity() {
-        startActivity(new Intent(this, AddNoteActivity.class));
-    }
+
 }
